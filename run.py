@@ -9,7 +9,7 @@ import os.path
 prodB1 = 4442.7
 prodB2 = 4290.2
 
-def sticazzi(chat_id):
+def production(chat_id):
 	day = time.strftime("%d").lstrip('0')
 	month = time.strftime("%m").lstrip('0')
 	file_name = month + " giorno " + day + "_" + month + " medie.txt"
@@ -48,7 +48,7 @@ def handle(msg):
     elif command == '/time':
         bot.sendMessage(chat_id, str(datetime.datetime.now()))
     elif command == '/prod':
-        sticazzi(chat_id)
+        production(chat_id)
 
 bot = telepot.Bot('137481181:AAGGl_Sqd86Qs2TT4W5xTTgjaGoZxrjxlVI')
 bot.notifyOnMessage(handle)

@@ -64,7 +64,7 @@ def get_statistics(a_strings, b_strings):
     message += "\nA3/A2: " + to_send
     b2overa3 = ((b_strings[0] / 11) / (a_strings[1] / 10) - 1) * 100
     to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3)
-    message += "\nB2/A3: " + to_send
+    message += "\nB1/A3 stringa: " + to_send
     message += strings.separator
     message += "\nRAPPORTI SU PROD TOTALE\n"
     to_send = '%.2f' % b_strings[3] + '% ' + emoji.get_emoji(b_strings[3])
@@ -73,5 +73,5 @@ def get_statistics(a_strings, b_strings):
     message += "\nA3/A2: " + to_send
     b2overa3 = ((b_strings[5] / 11) / (a_strings[6] / 10) - 1) * 100
     to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3)
-    message += "\nB2/A3: " + to_send
+    message += "\nB1/A3 stringa: " + to_send
     return message

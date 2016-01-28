@@ -124,9 +124,27 @@ def handle(msg):
         message += strings.separator
         message += istantanee.actual_production(last_update_act)
         sender(chat_id, message)
-    #elif command == '/statistiche':
-        #message = message
-        #sender(chat_id, message)
+    elif command == '/statistiche':
+        #get updated data
+        get_last_update(1)
+        get_last_update(2)
+        # recupera statistiche riferite alle produzioni totali e odierne
+        b_strings = dati_generali.get_updated_production(2, last_update_avg)
+        a_strings = dati_generali.get_updated_production(1, last_update_act)
+        message = dati_generali.get_statistics(a_strings, b_strings)
+        # recupera statistiche riferite alle istantanee
+        b1 = float(last_update_act[2])
+        b2 = float(last_update_act[3])
+        a2 = float(last_update_act[4])
+        a3 = float(last_update_act[5])
+        message += istantanee.get_statistics(b1, b2, a2, a3)
+        # recupera statistiche riferite alle medie
+        b1 = float(last_update_avg[2])
+        b2 = float(last_update_avg[3])
+        a2 = float(last_update_avg[4])
+        a3 = float(last_update_avg[5])
+        message += medie.get_statistics(b1, b2, a2, a3)
+        sender(chat_id, message)
     elif command == '/aiuto':
         message = 'I comandi disponibili sono i seguenti:\n'
         message += '\n\\rileva - effettua rilevazione dei dati'

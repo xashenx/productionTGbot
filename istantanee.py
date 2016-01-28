@@ -31,7 +31,8 @@ def get_statistics(b1, b2, a2, a3):
     message += "\nRAPPORTI SU ISTANTANEE\n"
     message += "\nB1/B2: %.2f" % b_perc + "% " + emoji.get_emoji(b_perc)
     message += "\nA3/A2: %.2f" % a_perc + "% " + emoji.get_emoji(a_perc)
-    message += "\nB2/A3: %.2f" % b1a3_perc + "% " + emoji.get_emoji(b1a3_perc)
+    message += "\nB1/A3 stringa: %.2f" % b1a3_perc
+    message += "% " + emoji.get_emoji(b1a3_perc)
     return message
 
     ## TODO comando statistiche

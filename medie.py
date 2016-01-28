@@ -1,4 +1,5 @@
 import strings
+import emoji
 
 
 def actual_averages(last_update_avg):
@@ -13,17 +14,22 @@ def actual_averages(last_update_avg):
     message = "\nPRODUZIONI MEDIE\n"
     message += "\nB1: %s" % b1 + " kWh\nB2: %s" % b2 + " kWh"
     message += "\nA2: %s" % a2 + " kWh\nA3: %s" % a3 + " kWh"
-    message += strings.separator
+    message += get_statistics(b1, b2, a2, a3)
+    return message
 
-    if b1 == 0 or b2 == 0:
-        b_perc = 0
-    else:
+
+def get_statistics(b1, b2, a2, a3):
+    a_perc = b_perc = b1a3_perc = 0
+    if not (b1 == 0 or b2 == 0):
         b_perc = (b1 / b2 - 1) * 100
-    if a2 == 0 or a3 == 0:
-        a_perc = 0
-    else:
-        a_perc = (a2 / a3 - 1) * 100
+        if not a3 == 0:
+            b1a3_perc = ((b1 / 11) / (a3 / 10) - 1) * 100
+    if not (a2 == 0 or a3 == 0):
+        a_perc = (a3 / a2 - 1) * 100
+
+    message = strings.separator
     message += "\nRAPPORTI SU MEDIE\n"
-    message += "\nB1/B2: %.2f" % b_perc + "%"
-    message += "\nA2/A3: %.2f" % a_perc + "%"
+    message += "\nB1/B2: %.2f" % b_perc + "% " + emoji.get_emoji(b_perc)
+    message += "\nA3/A2: %.2f" % a_perc + "% " + emoji.get_emoji(a_perc)
+    message += "\nB2/A3: %.2f" % b1a3_perc + "% " + emoji.get_emoji(b1a3_perc)
     return message

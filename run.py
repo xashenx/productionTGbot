@@ -22,26 +22,44 @@ def get_last_update(mode):
         file_name = month + " giorno " + day + "_" + month + " istantanee.log"
     else:
         file_name = month + " giorno " + day + "_" + month + " medie.log"
-
-    if os.path.isfile(path + "/" + file_name):
-        fileHandle = open(path + "/" + file_name, "r")
+    if os.path.isfile(path + file_name):
+        fileHandle = open(path + file_name, "r")
         lineList = fileHandle.readlines()
         fileHandle.close()
 
-        msg = lineList[-2]
-        msg = lineList[-1]
+        position = -1
+        msg = lineList[position]
         msg = msg.replace('   ', 'z')
         msg = msg.replace(',', '.')
         msg = msg.split('z')
-        if (len(msg) < 8):
-            msg = lineList[-2]
+
+        cond_a = len(msg) < 8
+        if not cond_a:
+            cond_b = is_the_string_valid(msg)
+        while cond_a or cond_b:
+            position -= 1
+            msg = lineList[position]
             msg = msg.replace('   ', 'z')
             msg = msg.replace(',', '.')
             msg = msg.split('z')
-            if mode == 1:
-                last_update_act = msg
-            elif mode == 2:
-                last_update_avg = msg
+            cond_a = len(msg) < 8
+            if not cond_a:
+                cond_b = is_the_string_valid(msg)
+        msg[7] = msg[7].replace('\n', '')
+        msg[6] = str(float(msg[6]))
+        msg[7] = str(float(msg[7]))
+        if mode == 1:
+            last_update_act = msg
+        elif mode == 2:
+            last_update_avg = msg
+
+
+def is_the_string_valid(line):
+        cond_b = line[2].startswith('Error') or line[3].startswith('Error')
+        cond_c = line[4].startswith('Error') or line[5].startswith('Error')
+        cond_d = line[6].startswith('Error') or line[7].startswith('Error')
+        cond_e = len(line[6]) < 6 or len(line[7]) < 6
+        return cond_b or cond_c or cond_d or cond_e
 
 
 def handle(msg):
@@ -106,11 +124,17 @@ def handle(msg):
         message += strings.separator
         message += istantanee.actual_production(last_update_act)
         sender(chat_id, message)
+    #elif command == '/statistiche':
+        #message = message
+        #sender(chat_id, message)
     elif command == '/aiuto':
         message = 'I comandi disponibili sono i seguenti:\n'
         message += '\n\\rileva - effettua rilevazione dei dati'
         message += '\n\imposta [STRINGA] [VALORE] - fissa il VALORE di produ'
         message += 'zione della STRINGA da cui valutare i dati'
+        sender(chat_id, message)
+    elif command == '/start':
+        message = 'Grazie per aver iniziato ad usare MontaltoBot!\n'
         sender(chat_id, message)
     else:
         sender(chat_id, strings.command_not_found)

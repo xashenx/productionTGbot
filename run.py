@@ -65,8 +65,7 @@ def is_the_string_valid(line):
 def handle(msg):
     chat_id = msg['chat']['id']
     command = msg['text']
-
-    print('Ricevuto comando: %s' % command)
+    print('Ricevuto comando: %s' % command, ' da %s' % msg['from']['first_name'])
     if command == '/roll':
         bot.sendMessage(chat_id, random.randint(1, 6))
     elif command == '/time':

@@ -1,6 +1,4 @@
 import time
-import random
-import datetime
 import telepot
 import os.path
 import istantanee
@@ -10,19 +8,24 @@ import medie
 
 last_update_avg = []
 last_update_act = []
+valid_act_file = False
+valid_avg_file = False
 
 
 def get_last_update(mode):
-    global last_update_act, last_update_avg
+    global last_update_act, last_update_avg, valid_act_file, valid_avg_file
     with open(strings.data_path) as f:
         path = f.read().strip()
     day = time.strftime("%d").lstrip('0')
     month = time.strftime("%m").lstrip('0')
+    # controlla la validità del file
     if mode == 1:
         file_name = month + " giorno " + day + "_" + month + " istantanee.log"
     else:
         file_name = month + " giorno " + day + "_" + month + " medie.log"
-    if os.path.isfile(path + file_name):
+    valid_file = check_file_validity(path + file_name)
+    # se è valido, estrapola i dati
+    if valid_file:
         fileHandle = open(path + file_name, "r")
         lineList = fileHandle.readlines()
         fileHandle.close()
@@ -50,8 +53,16 @@ def get_last_update(mode):
         msg[7] = str(float(msg[7]))
         if mode == 1:
             last_update_act = msg
+            valid_act_file = valid_file
         elif mode == 2:
             last_update_avg = msg
+            valid_avg_file = valid_file
+
+
+def check_file_validity(fileToCheck):
+    cond_1 = os.path.isfile(fileToCheck)  # il file esiste
+    cond_2 = os.stat(fileToCheck).st_size > 0  # il file contiene dati
+    return cond_1 and cond_2
 
 
 def is_the_string_valid(line):
@@ -65,11 +76,15 @@ def is_the_string_valid(line):
 def handle(msg):
     chat_id = msg['chat']['id']
     command = msg['text']
-    print('Ricevuto comando: %s' % command, ' da %s' % msg['from']['first_name'])
-    if command == '/roll':
-        bot.sendMessage(chat_id, random.randint(1, 6))
-    elif command == '/time':
-        bot.sendMessage(chat_id, str(datetime.datetime.now()))
+    from_string = ' da %s' % msg['from']['first_name']
+    print('Ricevuto comando: %s' % command, from_string)
+
+    get_last_update(1)
+    get_last_update(2)
+    if not (valid_act_file and valid_avg_file):
+        message = 'E\' stato riscontrato un problema coi dati.\n'
+        message += 'Riprova più tardi!.\n'
+        sender(chat_id, message)
     elif command == '/generali':
         get_last_update(1)
         get_last_update(2)
@@ -124,7 +139,7 @@ def handle(msg):
         message += istantanee.actual_production(last_update_act)
         sender(chat_id, message)
     elif command == '/statistiche':
-        #get updated data
+        # prelevo i dati aggiornati
         get_last_update(1)
         get_last_update(2)
         # recupera statistiche riferite alle produzioni totali e odierne
@@ -152,6 +167,23 @@ def handle(msg):
         sender(chat_id, message)
     elif command == '/start':
         message = 'Grazie per aver iniziato ad usare MontaltoBot!\n'
+        sender(chat_id, message)
+    elif command == '/fine':
+        get_last_update(1)
+        get_last_update(2)
+        cmd = [0, 'B1', last_update_avg[6]]
+        set_production(cmd)
+        message = 'Produzione B1 impostata a: ' + last_update_avg[6] + '\n'
+        cmd = [0, 'B2', last_update_avg[7]]
+        set_production(cmd)
+        message += 'Produzione B2 impostata a: ' + last_update_avg[7] + '\n'
+        cmd = [0, 'A2', last_update_act[6]]
+        set_production(cmd)
+        message += 'Produzione A2 impostata a: ' + last_update_act[6] + '\n'
+        cmd = [0, 'A3', last_update_act[7]]
+        set_production(cmd)
+        message += 'Produzione A3 impostata a: ' + last_update_act[7] + '\n'
+        message += 'Produzioni aggiornate!\n'
         sender(chat_id, message)
     else:
         sender(chat_id, strings.command_not_found)
@@ -205,8 +237,59 @@ dati_generali.prodA3 = float(data[4].split(',')[1])
 bot = telepot.Bot(apitoken)
 bot.notifyOnMessage(handle)
 print('In ascolto')
+automatic_update_done = False
+end_of_day = False
+wakeup_interval = 10
+get_last_update(1)
+get_last_update(2)
 
 while 1:
-    time.sleep(10)
-    #print(last_update_act)
-    #print(last_update_avg)
+    time.sleep(wakeup_interval)
+    ora = time.strftime('%H')
+    minuti = time.strftime('%M')
+    orario = ora + ':' + minuti
+    if orario == '8:00':
+        wakeup_interval = 20
+    elif orario == '19:00':
+        wakeup_interval = 40
+
+    if int(ora) > 8 and int(ora) < 19:  # manda aggiornamento solo tra 8 e 18
+        valid_files = valid_act_file and valid_avg_file
+        if not valid_files:
+            get_last_update(1)
+            get_last_update(2)
+        if ("00" in minuti) and not automatic_update_done and valid_files:
+            print("invio aggiornamento automatico delle ore %s" % orario)
+            get_last_update(1)
+            get_last_update(2)
+            message = 'Aggiornamento orario delle %s\n' % orario
+            message += strings.last_update_msg + strings.at_time_msg
+            message += last_update_act[1]
+            message += strings.separator
+            dati = dati_generali.production(last_update_act, last_update_avg)
+            message += dati
+            sender('-108582578', message)
+            automatic_update_done = True
+        elif ("01" in minuti) and automatic_update_done:
+            automatic_update_done = False
+        end_of_day = False
+    # TODO verificare quando istantanee tutte a 0 (su 2/3 check)
+    # e chiudere la giornata (aumentare intervallo di wakeup?)
+    #print(last_update_act[3])
+    #if last_update_act[3] == '0.0':
+        #print("asdasdasd")
+    if int(ora) > 18 and not end_of_day:  # giornata è finita aggiorna prod
+        get_last_update(1)
+        get_last_update(2)
+        cmd = [0, 'B1', last_update_avg[6]]
+        set_production(cmd)
+        cmd = [0, 'B2', last_update_avg[7]]
+        set_production(cmd)
+        cmd = [0, 'A2', last_update_act[6]]
+        set_production(cmd)
+        cmd = [0, 'A3', last_update_act[7]]
+        set_production(cmd)
+        print('Fine giornata. Produzione aggiornata!')
+        end_of_day = True
+        valid_act_file = False
+        valid_avg_file = False

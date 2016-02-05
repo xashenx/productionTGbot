@@ -73,10 +73,16 @@ def is_the_string_valid(line):
         return cond_b or cond_c or cond_d or cond_e
 
 
+def check_auth(chat_id):
+        with open('data/auth_client') as f:
+            mylist = f.read().splitlines()
+        return chat_id in mylist
+
+
 def handle(msg):
     chat_id = msg['chat']['id']
     command = msg['text']
-    from_string = ' da %s' % msg['from']['first_name']
+    from_string = 'da %s' % msg['from']['first_name']
     print('Ricevuto comando: %s' % command, from_string)
 
     get_last_update(1)
@@ -85,6 +91,10 @@ def handle(msg):
         message = 'E\' stato riscontrato un problema coi dati.\n'
         message += 'Riprova più tardi!.\n'
         sender(chat_id, message)
+    elif not check_auth(str(chat_id)):
+        message = 'Mi dispiace, non posso eseguire il comando.\n'
+        sender(chat_id, message)
+        print('chat_id non riconosciuto %s' % chat_id, '%s' % from_string)
     elif command == '/generali':
         get_last_update(1)
         get_last_update(2)

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import time
 import telepot
 import os.path
@@ -61,7 +63,9 @@ def get_last_update(mode):
 
 def check_file_validity(fileToCheck):
     cond_1 = os.path.isfile(fileToCheck)  # il file esiste
-    cond_2 = os.stat(fileToCheck).st_size > 0  # il file contiene dati
+    cond_2 = False
+    if cond_1:
+    	cond_2 = os.stat(fileToCheck).st_size > 0  # il file contiene dati
     return cond_1 and cond_2
 
 
@@ -268,6 +272,7 @@ while 1:
         if not valid_files:
             get_last_update(1)
             get_last_update(2)
+            valid_files = valid_act_file and valid_avg_file
         if ("00" in minuti) and not automatic_update_done and valid_files:
             print("invio aggiornamento automatico delle ore %s" % orario)
             get_last_update(1)

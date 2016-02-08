@@ -153,10 +153,10 @@ def handle(msg):
         message += istantanee.actual_production(last_update_act)
         sender(chat_id, message)
     elif command == '/produzione':
-        message = "B1: %s" % dati_generali.prodB1
-        message += "B2: %s" % dati_generali.prodB2
-        message += "A2: %s" % dati_generali.prodA2
-        message += "A3: %s" % dati_generali.prodA3
+        message = "B1: %s\n" % dati_generali.prodB1
+        message += "B2: %s\n" % dati_generali.prodB2
+        message += "A2: %s\n" % dati_generali.prodA2
+        message += "A3: %s\n" % dati_generali.prodA3
         sender(chat_id, message)
     elif command == '/statistiche':
         # prelevo i dati aggiornati

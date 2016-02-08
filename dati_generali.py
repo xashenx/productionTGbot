@@ -35,7 +35,7 @@ def get_updated_production(mode, updated_data):
         actualA3 = float(updated_data[7])
         dataA.append(actualA2 - prodA2)
         dataA.append(actualA3 - prodA3)
-        if dataB[0] != 0 and dataB[1] != 0:
+        if dataA[0] != 0 and dataA[1] != 0:
             dataA.append((dataA[1] / dataA[0] - 1) * 100)
         else:
             dataA.append(0)
@@ -72,7 +72,7 @@ def get_statistics(a_strings, b_strings):
     message += "\nA3/A2: " + to_send + diffa3a2
     b2overa3 = ((b_strings[0] / 11) / (a_strings[1] / 10) - 1) * 100
     to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3)
-    diffb2a3 = ' (%.1f' % (b_strings[0] - a_strings[1]) + 'kW)'
+    diffb2a3 = ' (%.1f' % (b_strings[0] / 11 - a_strings[1] / 10) + 'kW)'
     message += "\nB1/A3 stringa: " + to_send + diffb2a3
     message += strings.separator
     message += "\nRAPPORTI SU PROD TOTALE\n"

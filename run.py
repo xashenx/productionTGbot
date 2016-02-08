@@ -65,7 +65,7 @@ def check_file_validity(fileToCheck):
     cond_1 = os.path.isfile(fileToCheck)  # il file esiste
     cond_2 = False
     if cond_1:
-    	cond_2 = os.stat(fileToCheck).st_size > 0  # il file contiene dati
+        cond_2 = os.stat(fileToCheck).st_size > 0  # il file contiene dati
     return cond_1 and cond_2
 
 
@@ -151,6 +151,12 @@ def handle(msg):
         message += medie.actual_averages(last_update_avg)
         message += strings.separator
         message += istantanee.actual_production(last_update_act)
+        sender(chat_id, message)
+    elif command == '/produzione':
+        message = "B1: %s" % dati_generali.prodB1
+        message += "B2: %s" % dati_generali.prodB2
+        message += "A2: %s" % dati_generali.prodA2
+        message += "A3: %s" % dati_generali.prodA3
         sender(chat_id, message)
     elif command == '/statistiche':
         # prelevo i dati aggiornati

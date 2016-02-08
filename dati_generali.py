@@ -35,7 +35,10 @@ def get_updated_production(mode, updated_data):
         actualA3 = float(updated_data[7])
         dataA.append(actualA2 - prodA2)
         dataA.append(actualA3 - prodA3)
-        dataA.append((dataA[1] / dataA[0] - 1) * 100)
+        if dataB[0] != 0 and dataB[1] != 0:
+            dataA.append((dataA[1] / dataA[0] - 1) * 100)
+        else:
+            dataA.append(0)
         dataA.append((actualA3 / actualA2 - 1) * 100)
         dataA.append(updated_data[1])  # ora aggiornamento
         dataA.append(actualA2)  # totale di oggi A2
@@ -48,7 +51,10 @@ def get_updated_production(mode, updated_data):
         actualB2 = float(updated_data[7])
         dataB.append(actualB1 - prodB1)
         dataB.append(actualB2 - prodB2)
-        dataB.append((dataB[0] / dataB[1] - 1) * 100)
+        if dataB[0] != 0 and dataB[1] != 0:
+            dataB.append((dataB[0] / dataB[1] - 1) * 100)
+        else:
+            dataB.append(0)
         dataB.append((actualB1 / actualB2 - 1) * 100)
         dataB.append(updated_data[1])  # ora aggiornamento
         dataB.append(actualB1)  # totale di oggi B1

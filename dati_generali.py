@@ -59,14 +59,14 @@ def get_updated_production(mode, updated_data):
 def get_statistics(a_strings, b_strings):
     message = "\nRAPPORTI SU PROD ODIERNA\n"
     to_send = '%.2f' % b_strings[2] + '% ' + emoji.get_emoji(b_strings[2])
-    diffb1b2 = ' (%.0f' + b_strings[0] - b_strings[1] + ')'
+    diffb1b2 = ' (%.1f' % (b_strings[0] - b_strings[1]) + 'kW)'
     message += "\nB1/B2: " + to_send + diffb1b2
     to_send = '%.2f' % a_strings[2] + '% ' + emoji.get_emoji(a_strings[2])
-    diffa3a2 = ' (' + str(a_strings[1] - a_strings[0]) + ')'
+    diffa3a2 = ' (%.1f' % (a_strings[1] - a_strings[0]) + 'kW)'
     message += "\nA3/A2: " + to_send + diffa3a2
     b2overa3 = ((b_strings[0] / 11) / (a_strings[1] / 10) - 1) * 100
     to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3)
-    diffb2a3 = ' (' + str(b_strings[0] - a_strings[1]) + ')'
+    diffb2a3 = ' (%.1f' % (b_strings[0] - a_strings[1]) + 'kW)'
     message += "\nB1/A3 stringa: " + to_send + diffb2a3
     message += strings.separator
     message += "\nRAPPORTI SU PROD TOTALE\n"

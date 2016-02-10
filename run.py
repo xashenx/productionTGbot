@@ -12,10 +12,12 @@ last_update_avg = []
 last_update_act = []
 valid_act_file = False
 valid_avg_file = False
+result = False
 
 
 def get_last_update(mode):
     global last_update_act, last_update_avg, valid_act_file, valid_avg_file
+    global result
     with open(strings.data_path) as f:
         path = f.read().strip()
     day = time.strftime("%d").lstrip('0')
@@ -25,48 +27,81 @@ def get_last_update(mode):
         file_name = month + " giorno " + day + "_" + month + " istantanee.log"
     else:
         file_name = month + " giorno " + day + "_" + month + " medie.log"
-    valid_file = check_file_validity(path + file_name)
+    valid_file = check_file_validity(path + file_name, mode)
+
     # se è valido, estrapola i dati
     if valid_file:
-        fileHandle = open(path + file_name, "r")
+        #fileHandle = open(path + file_name, "r")
+        #lineList = fileHandle.readlines()
+        #fileHandle.close()
+
+        #position = -1
+        #msg = lineList[position]
+        #msg = msg.replace('   ', 'z')
+        #msg = msg.replace(',', '.')
+        #msg = msg.split('z')
+
+        #cond_a = len(msg) < 8
+        #if not cond_a:
+            #cond_b = is_the_string_valid(msg)
+        #while cond_a or cond_b:
+            #position -= 1
+            #msg = lineList[position]
+            #msg = msg.replace('   ', 'z')
+            #msg = msg.replace(',', '.')
+            #msg = msg.split('z')
+            #cond_a = len(msg) < 8
+            #if not cond_a:
+                #cond_b = is_the_string_valid(msg)
+        #if not cond_a and not cond_b:
+            #msg[7] = msg[7].replace('\n', '')
+            #msg[6] = str(float(msg[6]))
+            #msg[7] = str(float(msg[7]))
+            #if mode == 1:
+                #last_update_act = msg
+                #valid_act_file = valid_file
+            #elif mode == 2:
+                #last_update_avg = msg
+                #valid_avg_file = valid_file
+            result = True  # sono presenti dei dati aggiornati!
+    else:
+        result = False
+
+
+def check_file_validity(fileToCheck, mode):
+    global last_update_act, last_update_avg, valid_act_file, valid_avg_file
+
+    cond_1 = os.path.isfile(fileToCheck)  # il file esiste
+    cond_2 = True  # trovata una riga valida
+    if cond_1 and os.stat(fileToCheck).st_size > 0:  # il file contiene dati
+        fileHandle = open(fileToCheck, "r")
         lineList = fileHandle.readlines()
         fileHandle.close()
-
         position = -1
-        msg = lineList[position]
-        msg = msg.replace('   ', 'z')
-        msg = msg.replace(',', '.')
-        msg = msg.split('z')
-
-        cond_a = len(msg) < 8
-        if not cond_a:
-            cond_b = is_the_string_valid(msg)
-        while cond_a or cond_b:
-            position -= 1
+        while position > -6 and cond_2 and (len(lineList) + position) > 1:
             msg = lineList[position]
+            position -= 1
             msg = msg.replace('   ', 'z')
             msg = msg.replace(',', '.')
             msg = msg.split('z')
-            cond_a = len(msg) < 8
-            if not cond_a:
-                cond_b = is_the_string_valid(msg)
-        msg[7] = msg[7].replace('\n', '')
-        msg[6] = str(float(msg[6]))
-        msg[7] = str(float(msg[7]))
-        if mode == 1:
-            last_update_act = msg
-            valid_act_file = valid_file
-        elif mode == 2:
-            last_update_avg = msg
-            valid_avg_file = valid_file
-
-
-def check_file_validity(fileToCheck):
-    cond_1 = os.path.isfile(fileToCheck)  # il file esiste
-    cond_2 = False
-    if cond_1:
-        cond_2 = os.stat(fileToCheck).st_size > 0  # il file contiene dati
-    return cond_1 and cond_2
+            if not len(msg) < 8:
+                cond_2 = is_the_string_valid(msg)
+                if not cond_2:
+                    msg[7] = msg[7].replace('\n', '')
+                    msg[6] = str(float(msg[6]))
+                    msg[7] = str(float(msg[7]))
+                    if mode == 1:
+                        last_update_act = msg
+                        valid_act_file = True
+                    elif mode == 2:
+                        last_update_avg = msg
+                        valid_avg_file = True
+                else:
+                    if mode == 1:
+                        valid_act_file = False
+                    elif mode == 2:
+                        valid_avg_file = False
+    return cond_1 and not cond_2
 
 
 def is_the_string_valid(line):
@@ -88,12 +123,23 @@ def handle(msg):
     command = msg['text']
     from_string = 'da %s' % msg['from']['first_name']
     print('Ricevuto comando: %s' % command, from_string)
+    if not check_auth(str(chat_id)):
+        message = 'Mi dispiace, non posso eseguire il comando.\n'
+        sender(chat_id, message)
+        print('chat_id non riconosciuto %s' % chat_id, '%s' % from_string)
+        return
+    elif not (valid_act_file and valid_avg_file):
+        # aggiorniamo i dati in possesso per vedere se ora abbiamo dati validi
+        get_last_update(1)
+        get_last_update(2)
 
-    get_last_update(1)
-    get_last_update(2)
-    if not (valid_act_file and valid_avg_file):
-        message = 'E\' stato riscontrato un problema coi dati.\n'
-        message += 'Riprova più tardi!.\n'
+    if not (valid_act_file and valid_avg_file and result):
+        # se non sono ancora validi, comunicarlo all'utente'
+        if not result:
+            message = "Non sono presenti dati aggiornati per soddisfare la richiesta!"
+        else:
+            message = 'E\' stato riscontrato un problema coi dati.\n'
+            message += 'Riprova più tardi!.\n'
         sender(chat_id, message)
     elif not check_auth(str(chat_id)):
         message = 'Mi dispiace, non posso eseguire il comando.\n'
@@ -207,6 +253,13 @@ def handle(msg):
         sender(chat_id, message)
     else:
         sender(chat_id, strings.command_not_found)
+
+
+def check_command(command):
+    ist_commands = ['/istantanee',]
+    avg_commands = ['/medie']
+    complete_commands = ['/statistiche','/completo']
+    other_commands = ['/start','/fine','/aiuto','/produzione','/imposta']
 
 
 def sender(chat_id, message):

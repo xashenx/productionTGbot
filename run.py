@@ -276,16 +276,16 @@ def set_production(command):
 
     # now change the 2nd line, note that you have to add a newline
     if command[1] == 'B1':
-        dati_generali.prodB1 = float(command[2])
+        #dati_generali.prodB1 = float(command[2])
         line = 1
     elif command[1] == 'B2':
-        dati_generali.prodB2 = float(command[2])
+        #dati_generali.prodB2 = float(command[2])
         line = 2
     elif command[1] == 'A2':
-        dati_generali.prodA2 = float(command[2])
+        #dati_generali.prodA2 = float(command[2])
         line = 3
     elif command[1] == 'A3':
-        dati_generali.prodA3 = float(command[2])
+        #dati_generali.prodA3 = float(command[2])
         line = 4
     data[line] = command[1] + ',' + command[2] + '\n'
 
@@ -293,6 +293,16 @@ def set_production(command):
     with open('data/produzioni', 'w') as prod_file:
         prod_file.writelines(data)
     prod_file.close()
+
+
+def update_production_variables():
+    with open('data/produzioni', 'r') as prod_file:
+        # leggo i dati di produzione del giorno precedente dal file
+        data = prod_file.readlines()
+        dati_generali.prodB1 = float(data[1].split(',')[1])
+        dati_generali.prodB2 = float(data[2].split(',')[1])
+        dati_generali.prodA2 = float(data[3].split(',')[1])
+        dati_generali.prodA3 = float(data[4].split(',')[1])
 
 
 api_token_path = 'data/api.token'
@@ -324,7 +334,7 @@ while 1:
     if orario == '8:00':
         wakeup_interval = 20
     elif orario == '19:00':
-        wakeup_interval = 40
+        wakeup_interval = 50
 
     if int(ora) > 8 and int(ora) < 19:  # manda aggiornamento solo tra 8 e 18
         valid_files = valid_act_file and valid_avg_file
@@ -363,7 +373,9 @@ while 1:
         set_production(cmd)
         cmd = [0, 'A3', last_update_act[7]]
         set_production(cmd)
-        print('Fine giornata. Produzione aggiornata!')
         end_of_day = True
         valid_act_file = False
         valid_avg_file = False
+    if orario == '00:05':
+        update_production_variables()
+        print('Fine giornata. Produzione aggiornata!')

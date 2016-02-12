@@ -333,10 +333,10 @@ while 1:
     orario = ora + ':' + minuti
     if orario == '8:00':
         wakeup_interval = 20
-    elif orario == '19:00':
+    elif orario == '20:00':
         wakeup_interval = 50
 
-    if int(ora) > 8 and int(ora) < 19:  # manda aggiornamento solo tra 8 e 18
+    if int(ora) > 8 and int(ora) < 20:  # manda aggiornamento solo tra 8 e 18
         valid_files = valid_act_file and valid_avg_file
         if not valid_files:
             get_last_update(1)
@@ -362,7 +362,7 @@ while 1:
     #print(last_update_act[3])
     #if last_update_act[3] == '0.0':
         #print("asdasdasd")
-    if int(ora) > 18 and not end_of_day:  # giornata è finita aggiorna prod
+    if int(ora) > 19 and not end_of_day:  # giornata è finita aggiorna prod
         get_last_update(1)
         get_last_update(2)
         cmd = [0, 'B1', last_update_avg[6]]

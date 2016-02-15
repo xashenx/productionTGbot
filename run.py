@@ -137,7 +137,7 @@ def handle(msg):
     if msg['from']['first_name'] == 'Andrea' and not random_answer.answer():
         message = random_answer.joke()
         sender(chat_id, message)
-    if not (valid_act_file and valid_avg_file and result):
+    else if not (valid_act_file and valid_avg_file and result):
         # se non sono ancora validi, comunicarlo all'utente'
         if not result:
             message = 'Non sono presenti dati aggiornati per soddisfare' + \

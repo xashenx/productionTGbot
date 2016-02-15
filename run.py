@@ -7,6 +7,7 @@ import istantanee
 import strings
 import dati_generali
 import medie
+import random_answer
 
 last_update_avg = []
 last_update_act = []
@@ -133,10 +134,14 @@ def handle(msg):
         get_last_update(1)
         get_last_update(2)
 
+    if msg['from']['first_name'] == 'Andrea' and not random_answer.answer():
+        message = random_answer.joke()
+        sender(chat_id, message)
     if not (valid_act_file and valid_avg_file and result):
         # se non sono ancora validi, comunicarlo all'utente'
         if not result:
-            message = "Non sono presenti dati aggiornati per soddisfare la richiesta!"
+            message = 'Non sono presenti dati aggiornati per soddisfare' + \
+            ' la richiesta!'
         else:
             message = 'E\' stato riscontrato un problema coi dati.\n'
             message += 'Riprova più tardi!.\n'
@@ -255,11 +260,11 @@ def handle(msg):
         sender(chat_id, strings.command_not_found)
 
 
-def check_command(command):
-    ist_commands = ['/istantanee',]
-    avg_commands = ['/medie']
-    complete_commands = ['/statistiche','/completo']
-    other_commands = ['/start','/fine','/aiuto','/produzione','/imposta']
+#def check_command(command):
+    #ist_commands = ['/istantanee',]
+    #avg_commands = ['/medie']
+    #complete_commands = ['/statistiche','/completo']
+    #other_commands = ['/start','/fine','/aiuto','/produzione','/imposta']
 
 
 def sender(chat_id, message):

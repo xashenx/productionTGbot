@@ -76,7 +76,8 @@ def get_statistics(a_strings, b_strings):
     diffb2a3 = ' (%.1f' % (b_strings[0] / 11 - a_strings[1] / 10) + 'kW)'
     message += "\nB1/A3 stringa: " + to_send + diffb2a3
     message += strings.separator
-    message += statistiche_mese()
+    message += statistiche_mese(b_strings[5], b_strings[6],
+    a_strings[5], a_strings[6])
     message += strings.separator
     message += "\nRAPPORTI SU PROD TOTALE\n"
     to_send = '%.2f' % b_strings[3] + '% ' + emoji.get_emoji(b_strings[3])
@@ -89,12 +90,12 @@ def get_statistics(a_strings, b_strings):
     return message
 
 
-def statistiche_mese():
+def statistiche_mese(actB1, actB2, actA2, actA3):
     message = "\nRAPPORTI SU PROD MENSILE\n"
-    cmB1 = prodB1 - meseB1
-    cmB2 = prodB2 - meseB2
-    cmA2 = prodA2 - meseA2
-    cmA3 = prodA3 - meseA3
+    cmB1 = actB1 - meseB1
+    cmB2 = actB2 - meseB2
+    cmA2 = actA2 - meseA2
+    cmA3 = actA3 - meseA3
     print('B1: ', prodB1, meseB1, cmB1)
     print('B2: ', prodB2, meseB2, cmB2)
     print('A2: ', prodA2, meseA2, cmA2)

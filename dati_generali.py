@@ -22,8 +22,6 @@ def production(last_update_act, last_update_avg):
     message += " (TOT. %s" % last_update_act[7] + ")"
     message += strings.separator
     message += get_statistics(a_strings, b_strings)
-    message += strings.separator
-    message += statistiche_mese()
     return message
     #sender(chat_id, message)
 
@@ -78,6 +76,8 @@ def get_statistics(a_strings, b_strings):
     diffb2a3 = ' (%.1f' % (b_strings[0] / 11 - a_strings[1] / 10) + 'kW)'
     message += "\nB1/A3 stringa: " + to_send + diffb2a3
     message += strings.separator
+    message += statistiche_mese()
+    message += strings.separator
     message += "\nRAPPORTI SU PROD TOTALE\n"
     to_send = '%.2f' % b_strings[3] + '% ' + emoji.get_emoji(b_strings[3])
     message += "\nB1/B2: " + to_send
@@ -95,6 +95,10 @@ def statistiche_mese():
     cmB2 = prodB2 - meseB2
     cmA2 = prodA2 - meseA2
     cmA3 = prodA3 - meseA3
+    print('B1: ', prodB1, meseB1, cmB1)
+    print('B2: ', prodB2, meseB2, cmB2)
+    print('A2: ', prodA2, meseA2, cmA2)
+    print('A3: ', prodA3, meseA3, cmA3)
     B1B2 = (cmB1 / cmB2 - 1) * 100
     A3A2 = (cmA3 / cmA2 - 1) * 100
     B1A3 = ((cmB1 / 11) / (cmA3 / 10) - 1) * 100

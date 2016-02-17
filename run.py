@@ -308,6 +308,21 @@ def update_production_variables():
         dati_generali.prodB2 = float(data[2].split(',')[1])
         dati_generali.prodA2 = float(data[3].split(',')[1])
         dati_generali.prodA3 = float(data[4].split(',')[1])
+    prod_file.close()
+    day = time.strftime("%d").lstrip('0')
+    if day == '1':
+        data[1] = 'B1,' + dati_generali.prodB1 + ',' + \
+        dati_generali.prodB1 + '\n'
+        data[2] = 'B2,' + dati_generali.prodB2 + ',' + \
+        dati_generali.prodB2 + '\n'
+        data[3] = 'A2,' + dati_generali.prodA2 + ',' + \
+        dati_generali.prodA2 + '\n'
+        data[4] = 'A3,' + dati_generali.prodA3 + ',' + \
+        dati_generali.prodA3 + '\n'
+        # and write everything back
+        with open('data/produzioni', 'w') as prod_file:
+            prod_file.writelines(data)
+        prod_file.close()
 
 
 api_token_path = 'data/api.token'
@@ -321,6 +336,11 @@ dati_generali.prodB1 = float(data[1].split(',')[1])
 dati_generali.prodB2 = float(data[2].split(',')[1])
 dati_generali.prodA2 = float(data[3].split(',')[1])
 dati_generali.prodA3 = float(data[4].split(',')[1])
+
+dati_generali.meseB1 = float(data[1].split(',')[2])
+dati_generali.meseB2 = float(data[2].split(',')[2])
+dati_generali.meseA2 = float(data[3].split(',')[2])
+dati_generali.meseA3 = float(data[4].split(',')[2])
 
 bot = telepot.Bot(apitoken)
 bot.notifyOnMessage(handle)

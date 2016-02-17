@@ -2,6 +2,7 @@ import strings
 import emoji
 
 prodB1 = prodB2 = prodA2 = prodA3 = 0
+meseB1 = meseB2 = meseA2 = meseA3 = 0
 
 
 def production(last_update_act, last_update_avg):
@@ -21,6 +22,8 @@ def production(last_update_act, last_update_avg):
     message += " (TOT. %s" % last_update_act[7] + ")"
     message += strings.separator
     message += get_statistics(a_strings, b_strings)
+    message += strings.separator
+    message += statistiche_mese()
     return message
     #sender(chat_id, message)
 
@@ -82,5 +85,23 @@ def get_statistics(a_strings, b_strings):
     message += "\nA3/A2: " + to_send
     b2overa3 = ((b_strings[5] / 11) / (a_strings[6] / 10) - 1) * 100
     to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3)
+    message += "\nB1/A3 stringa: " + to_send
+    return message
+
+
+def statistiche_mese():
+    message = "\nRAPPORTI SU PROD MENSILE\n"
+    cmB1 = prodB1 - meseB1
+    cmB2 = prodB2 - meseB2
+    cmA2 = prodA2 - meseA2
+    cmA3 = prodA3 - meseA3
+    B1B2 = (cmB1 / cmB2 - 1) * 100
+    A3A2 = (cmA3 / cmA2 - 1) * 100
+    B1A3 = ((cmB1 / 11) / (cmA3 / 10) - 1) * 100
+    to_send = '%.2f' % B1B2 + '% ' + emoji.get_emoji(B1B2)
+    message += "\nB1/B2: " + to_send
+    to_send = '%.2f' % A3A2 + '% ' + emoji.get_emoji(A3A2)
+    message += "\nA3/A2: " + to_send
+    to_send = '%.2f' % B1A3 + '% ' + emoji.get_emoji(B1A3)
     message += "\nB1/A3 stringa: " + to_send
     return message

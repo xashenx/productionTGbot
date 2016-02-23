@@ -9,17 +9,19 @@ jokes = ['Mi spiace non posso darti i dati!',
 'Grazie per aver richiesto i dati. Ciao.',
 'Io sto bene, tu?',
 'Dici che c\'è il sole oggi?',
-'E il cielo è sempre più bluuuuuu']
+'E il cielo è sempre più bluuuuuu'
+'Non siamo molto fortunati oggi, eh?'
+'1+1 di solito fa 2']
 
 
 def answer():
     random = randint(0, 9)
-    if random > 2:
+    if random > 1:
         return True
     else:
         return False
 
 
 def joke():
-    chosen = randint(0, 7)
+    chosen = randint(0, 9)
     return jokes[chosen]

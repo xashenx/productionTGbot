@@ -123,8 +123,12 @@ def handle(msg):
     chat_id = msg['chat']['id']
     command = msg['text']
     command = command.replace('@MontaltoBot','')
+    ora = time.strftime('%H')
+    minuti = time.strftime('%M')
+    orario = ora + ':' + minuti
+
     from_string = 'da %s' % msg['from']['first_name']
-    print('Ricevuto comando: %s' % command, from_string)
+    print('[%s]' % orario, 'Ricevuto comando: %s' % command, from_string)
     if not check_auth(str(chat_id)):
         message = 'Mi dispiace, non posso eseguire il comando.\n'
         sender(chat_id, message)

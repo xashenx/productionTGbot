@@ -122,6 +122,7 @@ def check_auth(chat_id):
 def handle(msg):
     chat_id = msg['chat']['id']
     command = msg['text']
+    command = command.replace('@MontaltoBot','')
     from_string = 'da %s' % msg['from']['first_name']
     print('Ricevuto comando: %s' % command, from_string)
     if not check_auth(str(chat_id)):
@@ -283,16 +284,20 @@ def set_production(command):
     if command[1] == 'B1':
         #dati_generali.prodB1 = float(command[2])
         line = 1
+        generali = dati_generali.meseB1
     elif command[1] == 'B2':
         #dati_generali.prodB2 = float(command[2])
         line = 2
+        generali = dati_generali.meseB2
     elif command[1] == 'A2':
         #dati_generali.prodA2 = float(command[2])
         line = 3
+        generali = dati_generali.meseA2
     elif command[1] == 'A3':
         #dati_generali.prodA3 = float(command[2])
         line = 4
-    data[line] = command[1] + ',' + command[2] + '\n'
+        generali = dati_generali.meseA3
+    data[line] = command[1] + ',' + command[2] + ',%.1f' % generali + '\n'
 
     # and write everything back
     with open('data/produzioni', 'w') as prod_file:

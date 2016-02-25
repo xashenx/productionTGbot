@@ -123,11 +123,13 @@ def handle(msg):
     global wakeup_interval
     chat_id = msg['chat']['id']
     command = msg['text']
-    command = command.replace('@MontaltoBot','')
+    command = command.replace('@MontaltoBot', '')
     log_time = time.strftime('%d/%m/%y %H:%M:%S')
 
     from_string = ' da %s' % msg['from']['first_name']
-    text_to_log = '[%s]' % log_time + ' ricevuto comando: %s' % command + from_string
+    text_to_log = '[%s]' % log_time + ' ricevuto comando: %s' % \
+    command + from_string
+
     print(text_to_log)
     with open('logs/actions', 'a') as actions:
         #actions.write(text_to_log + '\n')
@@ -214,10 +216,14 @@ def handle(msg):
         message += istantanee.actual_production(last_update_act)
         sender(chat_id, message)
     elif command == '/produzione':
-        message = "B1: %s" % dati_generali.prodB1 + ' | %s\n' % dati_generali.meseB1
-        message += "B2: %s" % dati_generali.prodB2 + ' | %s\n' % dati_generali.meseB2
-        message += "A2: %s" % dati_generali.prodA2 + ' | %s\n' % dati_generali.meseA2
-        message += "A3: %s" % dati_generali.prodA3 + ' | %s\n' % dati_generali.meseA3
+        message = "B1: %s" % dati_generali.prodB1 + ' | %s\n' % \
+        dati_generali.meseB1
+        message += "B2: %s" % dati_generali.prodB2 + ' | %s\n' % \
+        dati_generali.meseB2
+        message += "A2: %s" % dati_generali.prodA2 + ' | %s\n' % \
+        dati_generali.meseA2
+        message += "A3: %s" % dati_generali.prodA3 + ' | %s\n' % \
+        dati_generali.meseA3
         sender(chat_id, message)
     elif command == '/statistiche':
         # prelevo i dati aggiornati
@@ -390,7 +396,8 @@ while 1:
             valid_files = valid_act_file and valid_avg_file
         if ("00" in minuti) and not automatic_update_done and valid_files:
             log_time = time.strftime('%d/%m/%y %H:%M:%S')
-            text_to_log = '[%s]' % log_time + ' aggiornamento automatico delle ore %s' % orario
+            text_to_log = '[%s]' % log_time + \
+            ' aggiornamento automatico delle ore %s' % orario
             print(text_to_log)
             with open('logs/actions', 'a') as actions:
                 #actions.write(text_to_log + '\n')
@@ -431,7 +438,8 @@ while 1:
     if orario == '00:05':
         update_production_variables()
         log_time = time.strftime('%d/%m/%y %H:%M:%S')
-        text_to_log = '[%s]' % log_time + ' fine giornata: produzione aggiornata!'
+        text_to_log = '[%s]' % log_time + \
+        ' fine giornata: produzione aggiornata!'
         print(text_to_log)
         with open('logs/actions', 'a') as actions:
             #actions.write(text_to_log + '\n')

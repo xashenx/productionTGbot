@@ -65,14 +65,14 @@ def get_updated_production(mode, updated_data):
 
 def get_statistics(a_strings, b_strings):
     message = "\nRAPPORTI SU PROD ODIERNA\n"
-    to_send = '%.2f' % b_strings[2] + '% ' + emoji.get_emoji(b_strings[2])
+    to_send = '%.2f' % b_strings[2] + '% ' + emoji.get_emoji(b_strings[2], 1)
     diffb1b2 = ' (%.1f' % (b_strings[0] - b_strings[1]) + 'kW)'
     message += "\nB1/B2: " + to_send + diffb1b2
-    to_send = '%.2f' % a_strings[2] + '% ' + emoji.get_emoji(a_strings[2])
+    to_send = '%.2f' % a_strings[2] + '% ' + emoji.get_emoji(a_strings[2], 2)
     diffa3a2 = ' (%.1f' % (a_strings[1] - a_strings[0]) + 'kW)'
     message += "\nA3/A2: " + to_send + diffa3a2
     b2overa3 = ((b_strings[0] / 11) / (a_strings[1] / 10) - 1) * 100
-    to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3)
+    to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3, 1)
     diffb2a3 = ' (%.1f' % (b_strings[0] / 11 - a_strings[1] / 10) + 'kW)'
     message += "\nB1/A3 stringa: " + to_send + diffb2a3
     message += strings.separator
@@ -80,12 +80,12 @@ def get_statistics(a_strings, b_strings):
     a_strings[5], a_strings[6])
     message += strings.separator
     message += "\nRAPPORTI SU PROD TOTALE\n"
-    to_send = '%.2f' % b_strings[3] + '% ' + emoji.get_emoji(b_strings[3])
+    to_send = '%.2f' % b_strings[3] + '% ' + emoji.get_emoji(b_strings[3], 1)
     message += "\nB1/B2: " + to_send
-    to_send = '%.2f' % a_strings[3] + '% ' + emoji.get_emoji(a_strings[3])
+    to_send = '%.2f' % a_strings[3] + '% ' + emoji.get_emoji(a_strings[3], 2)
     message += "\nA3/A2: " + to_send
     b2overa3 = ((b_strings[5] / 11) / (a_strings[6] / 10) - 1) * 100
-    to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3)
+    to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3, 2)
     message += "\nB1/A3 stringa: " + to_send
     return message
 
@@ -103,10 +103,10 @@ def statistiche_mese(actB1, actB2, actA2, actA3):
     B1B2 = (cmB1 / cmB2 - 1) * 100
     A3A2 = (cmA3 / cmA2 - 1) * 100
     B1A3 = ((cmB1 / 11) / (cmA3 / 10) - 1) * 100
-    to_send = '%.2f' % B1B2 + '% ' + emoji.get_emoji(B1B2)
+    to_send = '%.2f' % B1B2 + '% ' + emoji.get_emoji(B1B2, 1)
     message += "\nB1/B2: " + to_send
-    to_send = '%.2f' % A3A2 + '% ' + emoji.get_emoji(A3A2)
+    to_send = '%.2f' % A3A2 + '% ' + emoji.get_emoji(A3A2, 2)
     message += "\nA3/A2: " + to_send
-    to_send = '%.2f' % B1A3 + '% ' + emoji.get_emoji(B1A3)
+    to_send = '%.2f' % B1A3 + '% ' + emoji.get_emoji(B1A3, 2)
     message += "\nB1/A3 stringa: " + to_send
     return message

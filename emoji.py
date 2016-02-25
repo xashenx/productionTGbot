@@ -10,8 +10,8 @@ incazzato = '\U0001F621'
 diavolo = '\U0001F608'
 
 #  valori di riferimento delle stringhe
-rifA = 2.18
-rifB = 1.05
+rifA = 1.05
+rifB = 2.18
 
 
 def get_emoji(value, mode):

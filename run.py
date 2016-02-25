@@ -120,6 +120,7 @@ def check_auth(chat_id):
 
 
 def handle(msg):
+    global wakeup_interval
     chat_id = msg['chat']['id']
     command = msg['text']
     command = command.replace('@MontaltoBot','')
@@ -129,7 +130,8 @@ def handle(msg):
     text_to_log = '[%s]' % log_time + ' ricevuto comando: %s' % command + from_string
     print(text_to_log)
     with open('logs/actions', 'a') as actions:
-        actions.write(text_to_log + '\n')
+        #actions.write(text_to_log + '\n')
+        actions.write(text_to_log + '(D %s)\n' % wakeup_interval)
     actions.close()
 
     if not check_auth(str(chat_id)):
@@ -212,10 +214,10 @@ def handle(msg):
         message += istantanee.actual_production(last_update_act)
         sender(chat_id, message)
     elif command == '/produzione':
-        message = "B1: %s\n" % dati_generali.prodB1
-        message += "B2: %s\n" % dati_generali.prodB2
-        message += "A2: %s\n" % dati_generali.prodA2
-        message += "A3: %s\n" % dati_generali.prodA3
+        message = "B1: %s" % dati_generali.prodB1 + ' | %s\n' % dati_generali.meseB1
+        message += "B2: %s" % dati_generali.prodB2 + ' | %s\n' % dati_generali.meseB2
+        message += "A2: %s" % dati_generali.prodA2 + ' | %s\n' % dati_generali.meseA2
+        message += "A3: %s" % dati_generali.prodA3 + ' | %s\n' % dati_generali.meseA3
         sender(chat_id, message)
     elif command == '/statistiche':
         # prelevo i dati aggiornati
@@ -376,7 +378,7 @@ while 1:
     minuti = time.strftime('%M')
     orario = ora + ':' + minuti
     if orario == '8:00':
-        wakeup_interval = 20
+        wakeup_interval = 10
     elif orario == '20:00':
         wakeup_interval = 59
 
@@ -391,7 +393,8 @@ while 1:
             text_to_log = '[%s]' % log_time + ' aggiornamento automatico delle ore %s' % orario
             print(text_to_log)
             with open('logs/actions', 'a') as actions:
-                actions.write(text_to_log + '\n')
+                #actions.write(text_to_log + '\n')
+                actions.write(text_to_log + '(D %s)\n' % wakeup_interval)
             actions.close()
             get_last_update(1)
             get_last_update(2)
@@ -431,5 +434,6 @@ while 1:
         text_to_log = '[%s]' % log_time + ' fine giornata: produzione aggiornata!'
         print(text_to_log)
         with open('logs/actions', 'a') as actions:
-            actions.write(text_to_log + '\n')
+            #actions.write(text_to_log + '\n')
+            actions.write(text_to_log + '(D %s)\n' % wakeup_interval)
         actions.close()

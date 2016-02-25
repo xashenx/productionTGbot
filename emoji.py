@@ -33,10 +33,10 @@ def get_emoji(value, mode):
     elif diff >= -0.5 and diff < 0:
         return scimmia_occhi
     #elif value >= 2.18 and value < 2.3:
-    elif diff >= 0 and diff < 0.5:
+    elif diff >= 0 and diff < 0.7:
         return scazzato
     #elif value >= 2.3 and value < 3:
-    elif diff >= 0.5 and diff < 1.5:
+    elif diff >= 0.7 and diff < 1.5:
         return contento
     #elif value >= 3 and value < 6:
     elif diff >= 1.5 and diff < 3:

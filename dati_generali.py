@@ -3,6 +3,11 @@ import emoji
 
 prodB1 = prodB2 = prodA2 = prodA3 = 0
 meseB1 = meseB2 = meseA2 = meseA3 = 0
+# valori di produzione prima dell'applicazione coating del 24/02/16
+fixB1 = 8644.0
+fixB2 = 8309.7
+fixA2 = 8291.7
+fixA3 = 8383.2
 
 
 def production(last_update_act, last_update_avg):
@@ -80,9 +85,19 @@ def get_statistics(a_strings, b_strings):
     a_strings[5], a_strings[6])
     message += strings.separator
     message += "\nRAPPORTI SU PROD TOTALE\n"
-    to_send = '%.2f' % b_strings[3] + '% ' + emoji.get_emoji(b_strings[3], 1)
-    message += "\nB1/B2: " + to_send
+    message += ''
+    # calcola il rapporto di produzione dal 25/02/16
+    B1postFix = b_strings[0] - fixB1
+    B2postFix = b_strings[1] - fixB2
+    B1B2postFix = (B1postFix / B2postFix - 1) * 100
+    A2postFix = a_strings[0] - fixA2
+    A3postFix = a_strings[1] - fixA3
+    A3A2postFix = (A3postFix / A2postFix - 1) * 100
+    to_send = '[%.2f' % b_strings[3] + '% ' + emoji.get_emoji(b_strings[3], 1)
+    to_send += '][%.2f' % B1B2postFix + '% ' + emoji.get_emoji(B1B2postFix, 1)
+    message += "\nB1/B2: " + to_send + ']'
     to_send = '%.2f' % a_strings[3] + '% ' + emoji.get_emoji(a_strings[3], 2)
+    to_send += '][%.2f' % A3A2postFix + '% ' + emoji.get_emoji(A3A2postFix, 1)
     message += "\nA3/A2: " + to_send
     b2overa3 = ((b_strings[5] / 11) / (a_strings[6] / 10) - 1) * 100
     to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3, 2)

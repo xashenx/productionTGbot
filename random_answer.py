@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from random import randint
+import time
 
 jokes = ['Mi spiace non posso darti i dati!',
 'Magari un altro giorno.',
@@ -9,8 +10,9 @@ jokes = ['Mi spiace non posso darti i dati!',
 'Grazie per aver richiesto i dati. Ciao.',
 'Io sto bene, tu?',
 'Dici che c\'è il sole oggi?',
-'E il cielo è sempre più bluuuuuu'
-'Non siamo molto fortunati oggi, eh?'
+'E il cielo è sempre più bluuuuuu',
+'Non siamo molto fortunati oggi, eh?',
+'Scusami, ma ho una telefonata sull\'altra linea',
 '1+1 di solito fa 2']
 
 
@@ -23,5 +25,10 @@ def answer():
 
 
 def joke():
-    chosen = randint(0, 9)
+    chosen = randint(0, 10)
+    with open('logs/actions', 'a') as actions:
+        log_time = time.strftime('%d/%m/%y %H:%M:%S')
+        text_to_log = '[%s]' % log_time + ' scherzo #%s' % chosen + ' scelto'
+        actions.write(text_to_log + '\n')
+        print(text_to_log)
     return jokes[chosen]

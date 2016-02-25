@@ -125,8 +125,13 @@ def handle(msg):
     command = command.replace('@MontaltoBot','')
     log_time = time.strftime('%d/%m/%y %H:%M:%S')
 
-    from_string = 'da %s' % msg['from']['first_name']
-    print('[%s]' % log_time, 'Ricevuto comando: %s' % command, from_string)
+    from_string = ' da %s' % msg['from']['first_name']
+    text_to_log = '[%s]' % log_time + ' ricevuto comando: %s' % command + from_string
+    print(text_to_log)
+    with open('logs/actions', 'a') as actions:
+        actions.write(text_to_log + '\n')
+    actions.close()
+
     if not check_auth(str(chat_id)):
         message = 'Mi dispiace, non posso eseguire il comando.\n'
         sender(chat_id, message)
@@ -358,6 +363,13 @@ wakeup_interval = 10
 get_last_update(1)
 get_last_update(2)
 
+# logghiamo l'avvio del bot
+with open('logs/actions', 'a') as actions:
+    log_time = time.strftime('%d/%m/%y %H:%M:%S')
+    text_to_log = '[%s]' % log_time + ' avvio del bot'
+    actions.write(text_to_log + '\n')
+actions.close()
+
 while 1:
     time.sleep(wakeup_interval)
     ora = time.strftime('%H')
@@ -366,7 +378,7 @@ while 1:
     if orario == '8:00':
         wakeup_interval = 20
     elif orario == '20:00':
-        wakeup_interval = 50
+        wakeup_interval = 59
 
     if int(ora) > 8 and int(ora) < 20:  # manda aggiornamento solo tra 8 e 18
         valid_files = valid_act_file and valid_avg_file
@@ -375,7 +387,12 @@ while 1:
             get_last_update(2)
             valid_files = valid_act_file and valid_avg_file
         if ("00" in minuti) and not automatic_update_done and valid_files:
-            print("invio aggiornamento automatico delle ore %s" % orario)
+            log_time = time.strftime('%d/%m/%y %H:%M:%S')
+            text_to_log = '[%s]' % log_time + ' aggiornamento automatico delle ore %s' % orario
+            print(text_to_log)
+            with open('logs/actions', 'a') as actions:
+                actions.write(text_to_log + '\n')
+            actions.close()
             get_last_update(1)
             get_last_update(2)
             message = 'Aggiornamento orario delle %s\n' % orario
@@ -410,4 +427,9 @@ while 1:
         valid_avg_file = False
     if orario == '00:05':
         update_production_variables()
-        print('Fine giornata. Produzione aggiornata!')
+        log_time = time.strftime('%d/%m/%y %H:%M:%S')
+        text_to_log = '[%s]' % log_time + ' fine giornata: produzione aggiornata!'
+        print(text_to_log)
+        with open('logs/actions', 'a') as actions:
+            actions.write(text_to_log + '\n')
+        actions.close()

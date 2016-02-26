@@ -76,32 +76,34 @@ def get_statistics(a_strings, b_strings):
     to_send = '%.2f' % a_strings[2] + '% ' + emoji.get_emoji(a_strings[2], 2)
     diffa3a2 = ' (%.1f' % (a_strings[1] - a_strings[0]) + 'kW)'
     message += "\nA3/A2: " + to_send + diffa3a2
-    b2overa3 = ((b_strings[0] / 11) / (a_strings[1] / 10) - 1) * 100
-    to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3, 1)
-    diffb2a3 = ' (%.1f' % (b_strings[0] / 11 - a_strings[1] / 10) + 'kW)'
-    message += "\nB1/A3 stringa: " + to_send + diffb2a3
+    b1overa3 = ((b_strings[0] / 11) / (a_strings[1] / 10) - 1) * 100
+    to_send = '%.2f' % b1overa3 + '% ' + emoji.get_emoji(b1overa3, 1)
+    diffb1a3 = ' (%.1f' % (b_strings[0] / 11 - a_strings[1] / 10) + 'kW)'
+    message += "\nB1/A3 str: " + to_send + diffb1a3
     message += strings.separator
     message += statistiche_mese(b_strings[5], b_strings[6],
     a_strings[5], a_strings[6])
     message += strings.separator
     message += "\nRAPPORTI SU PROD TOTALE\n"
-    message += ''
+    message += '             [dopo 24/02][totale]\n'
     # calcola il rapporto di produzione dal 25/02/16
-    B1postFix = b_strings[0] - fixB1
-    B2postFix = b_strings[1] - fixB2
+    B1postFix = b_strings[5] - fixB1
+    B2postFix = b_strings[6] - fixB2
     B1B2postFix = (B1postFix / B2postFix - 1) * 100
-    A2postFix = a_strings[0] - fixA2
-    A3postFix = a_strings[1] - fixA3
+    A2postFix = a_strings[5] - fixA2
+    A3postFix = a_strings[6] - fixA3
     A3A2postFix = (A3postFix / A2postFix - 1) * 100
-    to_send = '[%.2f' % b_strings[3] + '% ' + emoji.get_emoji(b_strings[3], 1)
-    to_send += '][%.2f' % B1B2postFix + '% ' + emoji.get_emoji(B1B2postFix, 1)
+    B1A3postFix = ((B1postFix / 11) / (A3postFix / 10) - 1) * 100
+    to_send = '[%.2f' % B1B2postFix + '% ' + emoji.get_emoji(B1B2postFix, 1)
+    to_send += '][%.2f' % b_strings[3] + '% ' + emoji.get_emoji(b_strings[3], 1)
     message += "\nB1/B2: " + to_send + ']'
-    to_send = '%.2f' % a_strings[3] + '% ' + emoji.get_emoji(a_strings[3], 2)
-    to_send += '][%.2f' % A3A2postFix + '% ' + emoji.get_emoji(A3A2postFix, 1)
-    message += "\nA3/A2: " + to_send
+    to_send = '[%.2f' % A3A2postFix + '% ' + emoji.get_emoji(A3A2postFix, 1)
+    to_send += '][%.2f' % a_strings[3] + '% ' + emoji.get_emoji(a_strings[3], 2)
+    message += "\nA3/A2: " + to_send + ']'
     b2overa3 = ((b_strings[5] / 11) / (a_strings[6] / 10) - 1) * 100
-    to_send = '%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3, 2)
-    message += "\nB1/A3 stringa: " + to_send
+    to_send = '[%.2f' % B1A3postFix + '% ' + emoji.get_emoji(B1A3postFix, 1)
+    to_send += '][%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3, 2)
+    message += "\nB1/A3 str: " + to_send + ']'
     return message
 
 
@@ -123,5 +125,5 @@ def statistiche_mese(actB1, actB2, actA2, actA3):
     to_send = '%.2f' % A3A2 + '% ' + emoji.get_emoji(A3A2, 2)
     message += "\nA3/A2: " + to_send
     to_send = '%.2f' % B1A3 + '% ' + emoji.get_emoji(B1A3, 2)
-    message += "\nB1/A3 stringa: " + to_send
+    message += "\nB1/A3 str: " + to_send
     return message

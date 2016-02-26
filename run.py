@@ -148,7 +148,7 @@ def handle(msg):
         get_last_update(2)
 
     if msg['from']['first_name'] != 'Fabrizio' and not random_answer.answer():
-        message = random_answer.joke()
+        message = random_answer.joke(msg['from']['first_name'])
         sender(chat_id, message)
     elif not (valid_act_file and valid_avg_file and result):
         # se non sono ancora validi, comunicarlo all'utente'
@@ -294,7 +294,15 @@ def handle(msg):
         strout = strout.replace('b\'', '')
         strout = strout.replace('\\n', '')
         mau = strout.replace('\'', '')
-        message += 'Maurilio: %s' % mau + '\n'
+        cmd_jokes = 'cat logs/actions | grep \'per Maurilio\' | wc -l'
+        p = subprocess.Popen([cmd_jokes, ''], stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, shell=True)
+        out, err = p.communicate()
+        strout = str(out)
+        strout = strout.replace('b\'', '')
+        strout = strout.replace('\\n', '')
+        mauj = strout.replace('\'', '')
+        message += 'Maurilio: %s' % mau + ' (%s scherzi)\n' % mauj
         # andrea
         cmd_to_exe = cmd_to_exe.replace('Maurilio', 'Andrea')
         p = subprocess.Popen([cmd_to_exe, ''], stdout=subprocess.PIPE,
@@ -304,7 +312,15 @@ def handle(msg):
         strout = strout.replace('b\'', '')
         strout = strout.replace('\\n', '')
         andr = strout.replace('\'', '')
-        message += 'Andrea: %s' % andr + '\n'
+        cmd_jokes = 'cat logs/actions | grep \'per Andrea\' | wc -l'
+        p = subprocess.Popen([cmd_jokes, ''], stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, shell=True)
+        out, err = p.communicate()
+        strout = str(out)
+        strout = strout.replace('b\'', '')
+        strout = strout.replace('\\n', '')
+        andrj = strout.replace('\'', '')
+        message += 'Andrea: %s' % andr + ' (%s scherzi)\n' % andrj
         sender(chat_id, message)
     else:
         sender(chat_id, strings.command_not_found)

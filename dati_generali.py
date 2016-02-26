@@ -101,8 +101,10 @@ def get_statistics(a_strings, b_strings):
     to_send += '][%.2f' % a_strings[3] + '% ' + emoji.get_emoji(a_strings[3], 2)
     message += "\nA3/A2: " + to_send + ']'
     b2overa3 = ((b_strings[5] / 11) / (a_strings[6] / 10) - 1) * 100
-    to_send = '[%.2f' % B1A3postFix + '% ' + emoji.get_emoji(B1A3postFix, 1)
-    to_send += '][%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3, 2)
+    #to_send = '[%.2f' % B1A3postFix + '% ' + emoji.get_emoji(B1A3postFix, 1)
+    to_send = '[%.2f' % B1A3postFix + '%'
+    #to_send += '][%.2f' % b2overa3 + '% ' + emoji.get_emoji(b2overa3, 2)
+    to_send += '][%.2f' % b2overa3 + '%'
     message += "\nB1/A3 str: " + to_send + ']'
     return message
 

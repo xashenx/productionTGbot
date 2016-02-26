@@ -24,11 +24,12 @@ def answer():
         return False
 
 
-def joke():
+def joke(nome):
     chosen = randint(0, 10)
     with open('logs/actions', 'a') as actions:
         log_time = time.strftime('%d/%m/%y %H:%M:%S')
-        text_to_log = '[%s]' % log_time + ' scherzo #%s' % chosen + ' scelto'
+        text_to_log = '[%s]' % log_time + ' scherzo #%s' % chosen + \
+        ' scelto per ' + nome 
         actions.write(text_to_log + '\n')
         print(text_to_log)
     return jokes[chosen]

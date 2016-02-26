@@ -8,6 +8,7 @@ import strings
 import dati_generali
 import medie
 import random_answer
+import subprocess
 
 last_update_avg = []
 last_update_act = []
@@ -272,6 +273,12 @@ def handle(msg):
         message += 'Produzione A3 impostata a: ' + last_update_act[7] + '\n'
         message += 'Produzioni aggiornate!\n'
         sender(chat_id, message)
+    elif command == '/richieste':
+        cmd_to_exe = 'cat logs/actions | grep \'Fabrizio\' | wc -l'
+        p = subprocess.Popen([cmd_to_exe, ''], stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        print(out, err)
     else:
         sender(chat_id, strings.command_not_found)
 

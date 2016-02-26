@@ -274,11 +274,38 @@ def handle(msg):
         message += 'Produzioni aggiornate!\n'
         sender(chat_id, message)
     elif command == '/richieste':
+        message = 'CONTEGGIO RICHIESTE\n\n'
+        # fabrizio
         cmd_to_exe = 'cat logs/actions | grep \'Fabrizio\' | wc -l'
         p = subprocess.Popen([cmd_to_exe, ''], stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
+        stderr=subprocess.PIPE, shell=True)
         out, err = p.communicate()
-        print(out, err)
+        strout = str(out)
+        strout = strout.replace('b\'', '')
+        strout = strout.replace('\\n', '')
+        fab = strout.replace('\'', '')
+        message += 'Fabrizio: %s' % fab + '\n'
+        # maurilio
+        cmd_to_exe = cmd_to_exe.replace('Fabrizio', 'Maurilio')
+        p = subprocess.Popen([cmd_to_exe, ''], stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, shell=True)
+        out, err = p.communicate()
+        strout = str(out)
+        strout = strout.replace('b\'', '')
+        strout = strout.replace('\\n', '')
+        mau = strout.replace('\'', '')
+        message += 'Maurilio: %s' % mau + '\n'
+        # andrea
+        cmd_to_exe = cmd_to_exe.replace('Maurilio', 'Andrea')
+        p = subprocess.Popen([cmd_to_exe, ''], stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, shell=True)
+        out, err = p.communicate()
+        strout = str(out)
+        strout = strout.replace('b\'', '')
+        strout = strout.replace('\\n', '')
+        andr = strout.replace('\'', '')
+        message += 'Andrea: %s' % andr + '\n'
+        sender(chat_id, message)
     else:
         sender(chat_id, strings.command_not_found)
 

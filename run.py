@@ -436,7 +436,7 @@ while 1:
     if orario == '8:00':
         wakeup_interval = 10
     elif orario == '20:00':
-        wakeup_interval = 57
+        wakeup_interval = 55
 
     if int(ora) > 8 and int(ora) < 20:  # manda aggiornamento solo tra 8 e 18
         valid_files = valid_act_file and valid_avg_file

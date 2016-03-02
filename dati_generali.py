@@ -126,9 +126,9 @@ def statistiche_mese(actB1, actB2, actA2, actA3):
     B1A3 = ((cmB1 / 11) / (cmA3 / 10) - 1) * 100
     diffB1A3 = (cmB1 / 11) - (cmA3 / 10)
     to_send = '%.2f' % B1B2 + '% ' + emoji.get_emoji(B1B2, 1)
-    message += "\nB1/B2: " + to_send + ' (' + diffB1B2 + ')'
+    message += "\nB1/B2: " + to_send + ' (%.2f' % diffB1B2 + 'kW)'
     to_send = '%.2f' % A3A2 + '% ' + emoji.get_emoji(A3A2, 2)
-    message += "\nA3/A2: " + to_send + ' (' + diffA3A2 + ')'
+    message += "\nA3/A2: " + to_send + ' (%.2f' % diffA3A2 + 'kW)'
     to_send = '%.2f' % B1A3 + '% ' + emoji.get_emoji(B1A3, 2)
-    message += "\nB1/A3 str: " + to_send + ' (' + diffB1A3 + ')'
+    message += "\nB1/A3 str: " + to_send + ' (%.2f' % diffB1A3 + 'kW)'
     return message

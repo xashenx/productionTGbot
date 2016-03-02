@@ -381,13 +381,13 @@ def update_production_variables():
     prod_file.close()
     day = time.strftime("%d").lstrip('0')
     if day == '1':
-        data[1] = 'B1,' + dati_generali.prodB1 + ',' + \
+        data[1] = 'B1,%.1f' % dati_generali.prodB1 + ',%.1f' % \
         dati_generali.prodB1 + '\n'
-        data[2] = 'B2,' + dati_generali.prodB2 + ',' + \
+        data[2] = 'B2,%.1f' % dati_generali.prodB2 + ',i%.1f' % \
         dati_generali.prodB2 + '\n'
-        data[3] = 'A2,' + dati_generali.prodA2 + ',' + \
+        data[3] = 'A2,%.1f' % dati_generali.prodA2 + ',%.1f' % \
         dati_generali.prodA2 + '\n'
-        data[4] = 'A3,' + dati_generali.prodA3 + ',' + \
+        data[4] = 'A3,%.1f' % dati_generali.prodA3 + ',%.1f' % \
         dati_generali.prodA3 + '\n'
         # and write everything back
         with open('data/produzioni', 'w') as prod_file:
